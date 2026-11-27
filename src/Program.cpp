@@ -8,9 +8,15 @@ Program::Program() {
   programEnd_ = false;
 }
 
-void Program::addStmt(int line, Statement* stmt) { recorder_.add(line, stmt); }
+void Program::addStmt(int line, Statement* stmt) {
+  recorder_.add(line, stmt);
+  programCounter_ = recorder_.nextLine(-1);
+}
 
-void Program::removeStmt(int line) { recorder_.remove(line); }
+void Program::removeStmt(int line) {
+  recorder_.remove(line);
+  programCounter_ = recorder_.nextLine(-1);
+}
 
 void Program::run() {
   if (programEnd_ || recorder_.nextLine(-1) == -1) {
@@ -18,7 +24,6 @@ void Program::run() {
     return;
   }
 
-  programCounter_ = recorder_.nextLine(-1);
   while (programCounter_ != -1) {
     const Statement* cur_stmt = recorder_.get(programCounter_);
     programCounter_ = recorder_.nextLine(programCounter_);
@@ -50,11 +55,11 @@ void Program::changePC(int line) { programCounter_ = line; }
 void Program::programEnd() {
   clear();
   programEnd_ = true;
-  programCounter_ = -1;
+  programCounter_ = programCounter_ = recorder_.nextLine(-1);
 }
 
 void Program::resetAfterRun() noexcept {
   clear();
   programEnd_ = true;
-  programCounter_ = -1;
+  programCounter_ = programCounter_ = recorder_.nextLine(-1);
 }
