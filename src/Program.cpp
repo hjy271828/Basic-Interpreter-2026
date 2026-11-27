@@ -14,6 +14,7 @@ void Program::removeStmt(int line) { recorder_.remove(line); }
 
 void Program::run() {
   if (programEnd_ || recorder_.nextLine(-1) == -1) {
+    programEnd();
     return;
   }
 
@@ -22,7 +23,11 @@ void Program::run() {
     const Statement* cur_stmt = recorder_.get(programCounter_);
     programCounter_ = recorder_.nextLine(programCounter_);
     cur_stmt->execute(vars_, *this);
+    if (programEnd_) {
+      return;
+    }
   }
+  programEnd();
 }
 
 void Program::list() const { recorder_.printLines(); }
