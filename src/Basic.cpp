@@ -66,7 +66,7 @@ int main() {
       }
       ParsedLine new_parsed_line = parser.parseLine(new_tokens, line);
       std::optional<int> cur_line = new_parsed_line.getLine();
-      Statement* cur_stmt = new_parsed_line.getStatement();
+      Statement* cur_stmt = new_parsed_line.fetchStatement();
       if (cur_line == std::nullopt) {
         program.execute(cur_stmt);
       } else {

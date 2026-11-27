@@ -58,6 +58,9 @@ void Recorder::clear() noexcept {
 }
 
 void Recorder::printLines() const {
+  if (statements.empty()) {
+    return;
+  }
   std::string out;
   for (auto& [cur_line, cur_stmt] : statements) {
     out += cur_stmt->text() + '\n';
