@@ -37,7 +37,11 @@ void Program::clear() {
   vars_.clear();
 }
 
-void Program::execute(Statement* stmt) { stmt->execute(vars_, *this); }
+void Program::execute(Statement* stmt) {
+  if (stmt != nullptr) {
+    stmt->execute(vars_, *this);
+  }
+}
 
 int Program::getPC() const noexcept { return programCounter_; }
 
