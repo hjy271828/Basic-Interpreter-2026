@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+Recorder::~Recorder() { clear(); }
+
 void Recorder::add(int line, Statement* stmt) {
   for (auto& [cur_line, cur_stmt] : statements) {
     if (cur_line == line) {
