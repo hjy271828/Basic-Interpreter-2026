@@ -24,7 +24,7 @@ void PrintStatement::execute(VarState& state, Program& program) const {
 }
 
 void InputStatement::execute(VarState& state, Program& program) const {
-  std::cout << "?\n";
+  std::cout << "? ";
   int value = 0;
   std::cin >> value;
   state.setValue(varName, value);
