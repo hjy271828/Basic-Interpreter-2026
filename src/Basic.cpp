@@ -20,7 +20,7 @@ int main() {
     }
     try {
       // TODO: The main function.
-      TokenStream new_tokens = lexer.tokenize(line);
+      TokenStream new_tokens(lexer.tokenize(line));
       if (new_tokens.empty()) {
         continue;
       }
@@ -62,14 +62,16 @@ int main() {
         continue;
       } else if (first_token_type == TokenType::QUIT) {
         program.programEnd();
-        return 0;
+        program.clear();
+        break;
       }
       ParsedLine new_parsed_line = parser.parseLine(new_tokens, line);
       std::optional<int> cur_line = new_parsed_line.getLine();
-      Statement* cur_stmt = new_parsed_line.fetchStatement();
       if (cur_line == std::nullopt) {
+        Statement* cur_stmt = new_parsed_line.getStatement();
         program.execute(cur_stmt);
       } else {
+        Statement* cur_stmt = new_parsed_line.fetchStatement();
         if (cur_stmt == nullptr) {
           program.removeStmt(cur_line.value());
         } else {

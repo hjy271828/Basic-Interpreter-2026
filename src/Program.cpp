@@ -33,6 +33,7 @@ void Program::run() {
     }
   }
   programEnd();
+  resetAfterRun();
 }
 
 void Program::list() const { recorder_.printLines(); }
@@ -59,7 +60,6 @@ void Program::programEnd() {
 }
 
 void Program::resetAfterRun() noexcept {
-  clear();
-  programEnd_ = true;
+  programEnd_ = false;
   programCounter_ = programCounter_ = recorder_.nextLine(-1);
 }
