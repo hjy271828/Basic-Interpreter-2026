@@ -8,7 +8,9 @@ Recorder::~Recorder() { clear(); }
 void Recorder::add(int line, Statement* stmt) {
   for (auto& [cur_line, cur_stmt] : statements) {
     if (cur_line == line) {
-      delete cur_stmt;
+      if (cur_stmt) {
+        delete cur_stmt;
+      }
       cur_stmt = stmt;
       return;
     }
@@ -19,7 +21,9 @@ void Recorder::add(int line, Statement* stmt) {
 void Recorder::remove(int line) {
   for (auto& [cur_line, cur_stmt] : statements) {
     if (cur_line == line) {
-      delete cur_stmt;
+      if (cur_stmt) {
+        delete cur_stmt;
+      }
       statements.erase(line);
       return;
     }
@@ -46,7 +50,9 @@ bool Recorder::hasLine(int line) const noexcept {
 
 void Recorder::clear() noexcept {
   for (auto& [cur_line, cur_stmt] : statements) {
-    delete cur_stmt;
+    if (cur_stmt) {
+      delete cur_stmt;
+    }
   }
   statements.clear();
 }
