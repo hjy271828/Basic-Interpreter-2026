@@ -2,6 +2,7 @@
 #include "Program.hpp"
 
 #include "Statement.hpp"
+#include "utils/Error.hpp"
 
 Program::Program() {
   programCounter_ = -1;
@@ -51,7 +52,13 @@ void Program::execute(Statement* stmt) {
 
 int Program::getPC() const noexcept { return programCounter_; }
 
-void Program::changePC(int line) { programCounter_ = line; }
+void Program::changePC(int line) {
+  if (!recorder_.hasLine(line)) {
+    throw BasicError("LINE NUMBER ERROR");
+    return;
+  }
+  programCounter_ = line;
+}
 
 void Program::programEnd() {
   clear();
