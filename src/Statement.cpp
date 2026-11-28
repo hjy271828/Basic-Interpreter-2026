@@ -74,18 +74,15 @@ void EndStatement::execute(VarState& state, Program& program) const {
   program.programEnd();
 }
 
-LetStatement::~LetStatement() { delete expr; }
+LetStatement::~LetStatement() {}
 
-PrintStatement::~PrintStatement() { delete expr; }
+PrintStatement::~PrintStatement() {}
 
 InputStatement::~InputStatement() {}
 
 GotoStatement::~GotoStatement() {}
 
-IfStatement::~IfStatement() {
-  delete leftExpr;
-  delete rightExpr;
-}
+IfStatement::~IfStatement() {}
 
 RemStatement::~RemStatement() {}
 

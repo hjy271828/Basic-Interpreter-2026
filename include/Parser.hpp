@@ -47,8 +47,9 @@ class Parser {
   std::shared_ptr<Statement> parseEnd(TokenStream& tokens,
                                       const std::string& originLine) const;
 
-  Expression* parseExpression(TokenStream& tokens) const;
-  Expression* parseExpression(TokenStream& tokens, int precedence) const;
+  std::unique_ptr<Expression> parseExpression(TokenStream& tokens) const;
+  std::unique_ptr<Expression> parseExpression(TokenStream& tokens,
+                                              int precedence) const;
 
   int getPrecedence(TokenType op) const;
   int parseLiteral(const Token* token) const;

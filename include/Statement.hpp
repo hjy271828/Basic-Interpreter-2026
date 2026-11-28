@@ -39,30 +39,31 @@ class LetStatement : public Statement {
  public:
   ~LetStatement();
   void execute(VarState& state, Program& program) const;
-  LetStatement(std::string source, std::string varName, Expression* expr)
-      : Statement(source), varName(varName), expr(expr) {};
+  LetStatement(std::string source, std::string varName,
+               std::unique_ptr<Expression> expr)
+      : Statement(source), varName(varName), expr(std::move(expr)) {};
 
  private:
   std::string varName;
-  Expression* expr;
+  std::unique_ptr<Expression> expr;
 };
 
 class IfStatement : public Statement {
  public:
   ~IfStatement();
   void execute(VarState& state, Program& program) const;
-  IfStatement(std::string source, Expression* leftExpr, char op,
-              Expression* rightExpr, int targetLine)
+  IfStatement(std::string source, std::unique_ptr<Expression> leftExpr, char op,
+              std::unique_ptr<Expression> rightExpr, int targetLine)
       : Statement(source),
-        leftExpr(leftExpr),
+        leftExpr(std::move(leftExpr)),
         op(op),
-        rightExpr(rightExpr),
+        rightExpr(std::move(rightExpr)),
         targetLine(targetLine) {}
 
  private:
-  Expression* leftExpr;
+  std::unique_ptr<Expression> leftExpr;
   char op;
-  Expression* rightExpr;
+  std::unique_ptr<Expression> rightExpr;
   int targetLine;
 };
 
@@ -83,11 +84,11 @@ class PrintStatement : public Statement {
  public:
   ~PrintStatement();
   void execute(VarState& state, Program& program) const;
-  PrintStatement(std::string source, Expression* expr)
-      : Statement(source), expr(expr) {}
+  PrintStatement(std::string source, std::unique_ptr<Expression> expr)
+      : Statement(source), expr(std::move(expr)) {}
 
  private:
-  Expression* expr;
+  std::unique_ptr<Expression> expr;
 };
 
 class InputStatement : public Statement {
