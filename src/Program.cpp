@@ -24,13 +24,13 @@ void Program::run() {
     programEnd();
     return;
   }
-
+  programCounter_ = recorder_.nextLine(-1);
   while (programCounter_ != -1) {
     const Statement* cur_stmt = recorder_.get(programCounter_);
     programCounter_ = recorder_.nextLine(programCounter_);
     cur_stmt->execute(vars_, *this);
     if (programEnd_) {
-      return;
+      break;
     }
   }
   programEnd();
@@ -62,10 +62,10 @@ void Program::changePC(int line) {
 
 void Program::programEnd() {
   programEnd_ = true;
-  programCounter_ = programCounter_ = recorder_.nextLine(-1);
+  programCounter_ = recorder_.nextLine(-1);
 }
 
 void Program::resetAfterRun() noexcept {
   programEnd_ = false;
-  programCounter_ = programCounter_ = recorder_.nextLine(-1);
+  programCounter_ = recorder_.nextLine(-1);
 }
