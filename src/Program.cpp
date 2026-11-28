@@ -22,6 +22,7 @@ void Program::removeStmt(int line) {
 void Program::run() {
   if (programEnd_ || recorder_.nextLine(-1) == -1) {
     programEnd();
+    resetAfterRun();
     return;
   }
   programCounter_ = recorder_.nextLine(-1);
