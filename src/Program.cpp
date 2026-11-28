@@ -9,7 +9,7 @@ Program::Program() {
   programEnd_ = false;
 }
 
-void Program::addStmt(int line, Statement* stmt) {
+void Program::addStmt(int line, std::shared_ptr<Statement> stmt) {
   recorder_.add(line, stmt);
   programCounter_ = recorder_.nextLine(-1);
 }
@@ -27,7 +27,7 @@ void Program::run() {
   }
   programCounter_ = recorder_.nextLine(-1);
   while (programCounter_ != -1) {
-    const Statement* cur_stmt = recorder_.get(programCounter_);
+    const std::shared_ptr<Statement> cur_stmt = recorder_.get(programCounter_);
     programCounter_ = recorder_.nextLine(programCounter_);
     cur_stmt->execute(vars_, *this);
     if (programEnd_) {
@@ -45,7 +45,7 @@ void Program::clear() {
   vars_.clear();
 }
 
-void Program::execute(Statement* stmt) {
+void Program::execute(std::shared_ptr<Statement> stmt) {
   if (stmt != nullptr) {
     stmt->execute(vars_, *this);
   }

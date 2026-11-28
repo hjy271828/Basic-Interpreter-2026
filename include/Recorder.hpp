@@ -10,9 +10,9 @@ class Recorder {
  public:
   ~Recorder();
 
-  void add(int line, Statement* stmt);
+  void add(int line, std::shared_ptr<Statement> stmt);
   void remove(int line);
-  const Statement* get(int line) const noexcept;
+  const std::shared_ptr<Statement> get(int line) const noexcept;
   bool hasLine(int line) const noexcept;
   void clear() noexcept;
   void printLines() const;
@@ -20,5 +20,5 @@ class Recorder {
 
  private:
   // TODO.
-  std::map<int, Statement*> statements;
+  std::map<int, std::shared_ptr<Statement>> statements;
 };

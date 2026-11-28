@@ -5,12 +5,9 @@
 
 Recorder::~Recorder() { clear(); }
 
-void Recorder::add(int line, Statement* stmt) {
+void Recorder::add(int line, std::shared_ptr<Statement> stmt) {
   for (auto& [cur_line, cur_stmt] : statements) {
     if (cur_line == line) {
-      if (cur_stmt) {
-        delete cur_stmt;
-      }
       cur_stmt = stmt;
       return;
     }
@@ -21,16 +18,13 @@ void Recorder::add(int line, Statement* stmt) {
 void Recorder::remove(int line) {
   for (auto& [cur_line, cur_stmt] : statements) {
     if (cur_line == line) {
-      if (cur_stmt) {
-        delete cur_stmt;
-      }
       statements.erase(line);
       return;
     }
   }
 }
 
-const Statement* Recorder::get(int line) const noexcept {
+const std::shared_ptr<Statement> Recorder::get(int line) const noexcept {
   for (auto& [cur_line, cur_stmt] : statements) {
     if (cur_line == line) {
       return cur_stmt;
@@ -48,14 +42,7 @@ bool Recorder::hasLine(int line) const noexcept {
   return false;
 }
 
-void Recorder::clear() noexcept {
-  for (auto& [cur_line, cur_stmt] : statements) {
-    if (cur_stmt) {
-      delete cur_stmt;
-    }
-  }
-  statements.clear();
-}
+void Recorder::clear() noexcept { statements.clear(); }
 
 void Recorder::printLines() const {
   if (statements.empty()) {

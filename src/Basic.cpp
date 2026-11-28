@@ -57,10 +57,10 @@ int main() {
       ParsedLine new_parsed_line = parser.parseLine(new_tokens, line);
       std::optional<int> cur_line = new_parsed_line.getLine();
       if (cur_line == std::nullopt) {
-        Statement* cur_stmt = new_parsed_line.getStatement();
+        std::shared_ptr<Statement> cur_stmt = new_parsed_line.getStatement();
         program.execute(cur_stmt);
       } else {
-        Statement* cur_stmt = new_parsed_line.fetchStatement();
+        std::shared_ptr<Statement> cur_stmt = new_parsed_line.fetchStatement();
         if (cur_stmt == nullptr) {
           program.removeStmt(cur_line.value());
         } else {

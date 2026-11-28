@@ -11,18 +11,22 @@
 
 ParsedLine::ParsedLine() { statement_ = nullptr; }
 
-ParsedLine::~ParsedLine() { delete statement_; }
+ParsedLine::~ParsedLine() {}
 
 void ParsedLine::setLine(int line) { line_number_.emplace(line); }
 
 std::optional<int> ParsedLine::getLine() { return line_number_; }
 
-void ParsedLine::setStatement(Statement* stmt) { statement_ = stmt; }
+void ParsedLine::setStatement(std::shared_ptr<Statement> stmt) {
+  statement_ = stmt;
+}
 
-Statement* ParsedLine::getStatement() const { return statement_; }
+std::shared_ptr<Statement> ParsedLine::getStatement() const {
+  return statement_;
+}
 
-Statement* ParsedLine::fetchStatement() {
-  Statement* temp = statement_;
+std::shared_ptr<Statement> ParsedLine::fetchStatement() {
+  std::shared_ptr<Statement> temp = statement_;
   statement_ = nullptr;
   return temp;
 }
@@ -50,8 +54,8 @@ ParsedLine Parser::parseLine(TokenStream& tokens,
   return result;
 }
 
-Statement* Parser::parseStatement(TokenStream& tokens,
-                                  const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseStatement(
+    TokenStream& tokens, const std::string& originLine) const {
   if (tokens.empty()) {
     throw BasicError("SYNTAX ERROR");
   }
@@ -81,8 +85,8 @@ Statement* Parser::parseStatement(TokenStream& tokens,
   }
 }
 
-Statement* Parser::parseLet(TokenStream& tokens,
-                            const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseLet(
+    TokenStream& tokens, const std::string& originLine) const {
   if (tokens.empty()) {
     throw BasicError("SYNTAX ERROR");
   }
@@ -101,20 +105,22 @@ Statement* Parser::parseLet(TokenStream& tokens,
   auto expr = parseExpression(tokens);
 
   // TODO: create a corresponding stmt and return it.
-  Statement* new_let_stmt = new LetStatement(originLine, varName, expr);
+  std::shared_ptr<Statement> new_let_stmt(
+      new LetStatement(originLine, varName, expr));
   return new_let_stmt;
 }
 
-Statement* Parser::parsePrint(TokenStream& tokens,
-                              const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parsePrint(
+    TokenStream& tokens, const std::string& originLine) const {
   auto expr = parseExpression(tokens);
   // TODO: create a corresponding stmt and return it.
-  Statement* new_print_stmt = new PrintStatement(originLine, expr);
+  std::shared_ptr<Statement> new_print_stmt(
+      new PrintStatement(originLine, expr));
   return new_print_stmt;
 }
 
-Statement* Parser::parseInput(TokenStream& tokens,
-                              const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseInput(
+    TokenStream& tokens, const std::string& originLine) const {
   if (tokens.empty()) {
     throw BasicError("SYNTAX ERROR");
   }
@@ -126,12 +132,13 @@ Statement* Parser::parseInput(TokenStream& tokens,
 
   std::string varName = varToken->text;
   // TODO: create a corresponding stmt and return it.
-  Statement* new_input_stmt = new InputStatement(originLine, varName);
+  std::shared_ptr<Statement> new_input_stmt(
+      new InputStatement(originLine, varName));
   return new_input_stmt;
 }
 
-Statement* Parser::parseGoto(TokenStream& tokens,
-                             const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseGoto(
+    TokenStream& tokens, const std::string& originLine) const {
   if (tokens.empty()) {
     throw BasicError("SYNTAX ERROR");
   }
@@ -143,12 +150,13 @@ Statement* Parser::parseGoto(TokenStream& tokens,
 
   int targetLine = parseLiteral(lineToken);
   // TODO: create a corresponding stmt and return it.
-  Statement* new_goto_stmt = new GotoStatement(originLine, targetLine);
+  std::shared_ptr<Statement> new_goto_stmt(
+      new GotoStatement(originLine, targetLine));
   return new_goto_stmt;
 }
 
-Statement* Parser::parseIf(TokenStream& tokens,
-                           const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseIf(
+    TokenStream& tokens, const std::string& originLine) const {
   // 解析左表达式
   auto leftExpr = parseExpression(tokens);
 
@@ -194,26 +202,26 @@ Statement* Parser::parseIf(TokenStream& tokens,
   int targetLine = parseLiteral(lineToken);
 
   // TODO: create a corresponding stmt and return it.
-  Statement* new_if_stmt =
-      new IfStatement(originLine, leftExpr, op, rightExpr, targetLine);
+  std::shared_ptr<Statement> new_if_stmt(
+      new IfStatement(originLine, leftExpr, op, rightExpr, targetLine));
   return new_if_stmt;
 }
 
-Statement* Parser::parseRem(TokenStream& tokens,
-                            const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseRem(
+    TokenStream& tokens, const std::string& originLine) const {
   const Token* remInfo = tokens.get();
   if (!remInfo || remInfo->type != TokenType::REMINFO) {
     throw BasicError("SYNTAX ERROR");
   }
   // TODO: create a corresponding stmt and return it.
-  Statement* new_rem_stmt = new RemStatement(originLine);
+  std::shared_ptr<Statement> new_rem_stmt(new RemStatement(originLine));
   return new_rem_stmt;
 }
 
-Statement* Parser::parseEnd(TokenStream& tokens,
-                            const std::string& originLine) const {
+std::shared_ptr<Statement> Parser::parseEnd(
+    TokenStream& tokens, const std::string& originLine) const {
   // TODO: create a corresponding stmt and return it.
-  Statement* new_end_stmt = new EndStatement(originLine);
+  std::shared_ptr<Statement> new_end_stmt(new EndStatement(originLine));
   return new_end_stmt;
 }
 
