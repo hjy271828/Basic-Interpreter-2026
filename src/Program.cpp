@@ -61,7 +61,6 @@ void Program::changePC(int line) {
 }
 
 void Program::programEnd() {
-  clear();
   programEnd_ = true;
   programCounter_ = programCounter_ = recorder_.nextLine(-1);
 }
