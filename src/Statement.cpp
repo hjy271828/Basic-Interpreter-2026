@@ -26,8 +26,24 @@ void PrintStatement::execute(VarState& state, Program& program) const {
 void InputStatement::execute(VarState& state, Program& program) const {
   std::cout << " ? ";
   int value = 0;
-  std::cin >> value;
-  state.setValue(varName, value);
+  std::string line = "";
+  std::getline(std::cin, line);
+  try {
+    size_t pos = 0;
+    value = std::stoi(line, &pos);
+    if (pos < line.length()) {
+      std::cout << "INVALID NUMBER\n";
+      execute(state, program);
+    } else {
+      state.setValue(varName, value);
+    }
+  } catch (const std::invalid_argument& e) {
+    std::cout << "INVALID NUMBER\n";
+    execute(state, program);
+  } catch (const std::out_of_range& e) {
+    std::cout << "INVALID NUMBER\n";
+    execute(state, program);
+  }
 }
 
 void GotoStatement::execute(VarState& state, Program& program) const {
